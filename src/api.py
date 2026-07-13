@@ -46,7 +46,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title="Classificador de Categorias de Notícias",
-    description="Prevê a categoria de uma notícia a partir do seu título.",
+    description="Prevê a categoria de uma notícia a partir do seu título. Siga para POST para o teste.",
     version="1.0.0",
     lifespan=lifespan,
 )
@@ -77,8 +77,8 @@ def raiz() -> dict:
 def classificar(requisicao: Requisicao) -> Resposta:
     """Classifica um título de notícia e retorna a categoria prevista.
 
-    Aplica o mesmo pré-processamento do treino antes de prever. Se o título não sobrar
-    nenhum termo útil após a limpeza, retorna 422.
+    Envie o título no campo "string". Se o texto vier vazio ou não tiver 
+    nenhuma palavra significativa para o modelo analisar, a API retorna erro 422 pedindo um título válido.
     """
     pipeline = recursos["pipeline"]
     preprocessador = recursos["preprocessador"]
