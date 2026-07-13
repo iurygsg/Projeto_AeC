@@ -25,6 +25,9 @@ data/*
 *.joblib
 *.pkl
 
+# Exports/relatórios gerados pela análise
+*.xlsx
+
 # IDEs e editores
 .vscode/
 .idea/
