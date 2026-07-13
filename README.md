@@ -30,12 +30,48 @@ O dataset (`data/articles.csv`, ~480 MB) **não está no repositório** por caus
 Veja [`data/README.md`](data/README.md) para saber onde obtê-lo. Coloque o arquivo em
 `data/articles.csv` antes de executar o notebook.
 
+## Como usar
+
+O projeto tem duas fases (PRD, seção 8): **treino** (offline) e **serviço** (online).
+
+### 1. Treinar o modelo
+
+Gera o artefato `modelo/pipeline.joblib` a partir de `data/articles.csv`:
+
+```bash
+python -m src.train
+```
+
+### 2. Subir a API
+
+Carrega o pipeline treinado e expõe o endpoint de classificação:
+
+```bash
+uvicorn src.api:app --reload
+```
+
+- Documentação interativa: http://127.0.0.1:8000/docs
+- Exemplo de requisição:
+
+```bash
+curl -X POST http://127.0.0.1:8000/classificar \
+  -H "Content-Type: application/json" \
+  -d "{\"titulo\": \"Seleção brasileira vence e se classifica para a final da Copa\"}"
+```
+
+Resposta: `{"categoria_prevista": "esporte", "confianca": 0.87}`
+
 ## Estrutura
 
 ```
 Projeto_AeC/
 ├── data/               # dataset (ignorado pelo git, exceto README/.gitkeep)
-├── eda.ipynb           # análise exploratória + pré-processamento
+├── src/
+│   ├── preprocessing.py # Preprocessador (spaCy) — compartilhado por treino e API
+│   ├── train.py         # Fase 1: treina e serializa o pipeline
+│   └── api.py           # Fase 2: API FastAPI (POST /classificar)
+├── modelo/             # pipeline.joblib (ignorado pelo git; gerado pelo treino)
+├── eda.ipynb           # análise exploratória + narrativa das decisões
 ├── PRD.md              # documento de requisitos do produto
 ├── requirements.txt    # dependências Python
 └── .gitignore
