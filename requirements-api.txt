@@ -1,0 +1,15 @@
+# Dependências mínimas de RUNTIME da API (Fase 2 — serviço).
+# Usado pelo Dockerfile. Só o que src/api.py e src/preprocessing.py precisam
+# para carregar o pipeline.joblib e classificar. As dependências transitivas
+# (starlette, thinc, numpy, scipy, etc.) são resolvidas automaticamente pelo pip.
+#
+# Para rodar o projeto COMPLETO localmente (notebook, EDA, gráficos, treino),
+# use o requirements.txt — este arquivo é só para o serviço.
+
+fastapi==0.139.0
+uvicorn==0.51.0
+pydantic==2.13.4
+scikit-learn==1.7.2
+spacy==3.8.14
+joblib==1.5.3
+pandas==2.3.3

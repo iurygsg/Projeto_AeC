@@ -21,6 +21,10 @@ pip install -r requirements.txt
 python -m spacy download pt_core_news_sm
 ```
 
+> **Dois arquivos de dependências, de propósito:**
+> - `requirements.txt` — ambiente **completo** (notebook/EDA, treino, testes). Use este para rodar o projeto localmente.
+> - `requirements-api.txt` — só o **runtime da API** (sem jupyter, matplotlib, etc.). É o que o Docker instala, mantendo a imagem enxuta.
+
 > O notebook `eda.ipynb` já tem um fallback que baixa o modelo automaticamente na primeira
 > execução, então o passo 3 é opcional se você for rodar apenas o notebook.
 
@@ -59,7 +63,37 @@ curl -X POST http://127.0.0.1:8000/classificar \
   -d "{\"titulo\": \"Seleção brasileira vence e se classifica para a final da Copa\"}"
 ```
 
-Resposta: `{"categoria_prevista": "esporte", "confianca": 0.87}`
+Resposta: `{"categoria_prevista": "esporte", "confianca": 0.82}`
+
+### 3. (Opcional) Rodar via Docker
+
+A imagem serve a API com o modelo já treinado embutido (`pipeline.joblib`, ~6,8 MB);
+o dataset de 480 MB não entra na imagem. Requer que `modelo/pipeline.joblib` exista
+(rode `python -m src.train` antes, caso ainda não tenha treinado).
+
+```bash
+docker build -t classificador-noticias .
+docker run -p 8000:8000 classificador-noticias
+```
+
+Ou, com um único comando via Docker Compose (usa o `docker-compose.yml`):
+
+```bash
+docker compose up --build     # sobe a API; Ctrl+C para parar
+docker compose up -d --build  # em segundo plano; `docker compose down` para parar
+```
+
+A API fica disponível em http://127.0.0.1:8000/docs, igual à execução local.
+
+## Testes
+
+Testes com `pytest` cobrindo o pré-processamento e a API (endpoint de classificação,
+validações e casos de erro). Requer o ambiente completo (`requirements.txt`) e o modelo
+treinado em `modelo/pipeline.joblib`.
+
+```bash
+pytest -v
+```
 
 ## Estrutura
 
@@ -71,8 +105,13 @@ Projeto_AeC/
 │   ├── train.py         # Fase 1: treina e serializa o pipeline
 │   └── api.py           # Fase 2: API FastAPI (POST /classificar)
 ├── modelo/             # pipeline.joblib (ignorado pelo git; gerado pelo treino)
+├── tests/              # testes pytest (pré-processamento + API)
 ├── eda.ipynb           # análise exploratória + narrativa das decisões
+├── Dockerfile          # imagem da API (serve o modelo embutido)
+├── docker-compose.yml  # sobe a API com um único comando
+├── .dockerignore       # exclui data/ e .venv/ do build
 ├── PRD.md              # documento de requisitos do produto
-├── requirements.txt    # dependências Python
+├── requirements.txt     # dependências completas (local: notebook, treino, testes)
+├── requirements-api.txt # dependências mínimas de runtime (usadas pelo Docker)
 └── .gitignore
 ```

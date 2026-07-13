@@ -1,0 +1,21 @@
+# Orquestração do serviço de classificação de notícias.
+# Sobe a API (definida no Dockerfile) com um único comando: `docker compose up`.
+# Hoje há só um serviço; este arquivo documenta a configuração de execução em texto
+# versionado e deixa o projeto pronto para crescer (banco, cache, etc.) sem mudar o fluxo.
+
+services:
+  api:
+    build: .
+    image: classificador-noticias:latest
+    container_name: api-noticias
+    ports:
+      - "8000:8000"        # host:container — API acessível em http://localhost:8000
+    restart: unless-stopped
+
+    # Healthcheck: usa python (já presente na imagem) para não depender de curl.
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s    # tempo para o modelo carregar no lifespan antes de checar

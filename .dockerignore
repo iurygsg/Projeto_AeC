@@ -1,0 +1,23 @@
+# Dados brutos (480 MB) — NÃO entram na imagem; a API só precisa do modelo treinado
+data/
+
+# Ambiente virtual e caches locais
+.venv/
+__pycache__/
+*.py[cod]
+
+# Git e metadados
+.git/
+.gitignore
+
+# Notebooks e exports (não fazem parte do serviço)
+*.ipynb
+.ipynb_checkpoints/
+*.xlsx
+
+# IDEs
+.vscode/
+.idea/
+
+# Observação: modelo/pipeline.joblib (6,8 MB) É incluído de propósito —
+# é o artefato que a API carrega. Por isso NÃO está listado aqui.
