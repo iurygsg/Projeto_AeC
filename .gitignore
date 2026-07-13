@@ -1,0 +1,40 @@
+# Ambiente virtual
+.venv/
+venv/
+env/
+
+# Cache do Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Variáveis de ambiente / segredos
+.env
+*.env
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Dados — arquivos grandes NÃO vão pro GitHub (articles.csv tem ~480 MB)
+# Ignora todo o conteúdo de data/, mas mantém a estrutura da pasta
+data/*
+!data/.gitkeep
+!data/README.md
+
+# Modelo serializado (gerado no treino, pode ser grande)
+*.joblib
+*.pkl
+
+# IDEs e editores
+.vscode/
+.idea/
+*.swp
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Distribuição / build
+build/
+dist/
+*.egg-info/
