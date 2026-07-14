@@ -1,11 +1,10 @@
-"""Testes de integração da API (FastAPI).
-
-Usam o TestClient como context manager para disparar o ``lifespan`` — assim o pipeline
-treinado e o Preprocessador são carregados de verdade, exercitando o mesmo caminho de
-produção (carrega o modelo -> pré-processa -> classifica).
-
-Requer que ``modelo/pipeline.joblib`` exista (rode ``python -m src.train`` antes).
-"""
+# Testes de integração da API (FastAPI).
+#
+# Usam o TestClient como context manager para disparar o ``lifespan`` — assim o pipeline
+# treinado e o Preprocessador são carregados de verdade, exercitando o mesmo caminho de
+# produção (carrega o modelo -> pré-processa -> classifica).
+#
+# Requer que ``modelo/pipeline.joblib`` exista (rode ``python -m src.train`` antes).
 
 from __future__ import annotations
 
@@ -31,14 +30,14 @@ def client() -> TestClient:
 
 
 def test_health_check(client: TestClient) -> None:
-    """GET / confirma que o serviço está no ar."""
+    # GET / confirma que o serviço está no ar.
     resp = client.get("/")
     assert resp.status_code == 200
     assert resp.json()["status"] == "ok"
 
 
 def test_classificar_titulo_valido(client: TestClient) -> None:
-    """Um título claro de esporte deve retornar categoria e confiança coerentes."""
+    # Um título claro de esporte deve retornar categoria e confiança coerentes.
     resp = client.post(
         "/classificar",
         json={"titulo": "Seleção brasileira vence e se classifica para a final da Copa"},
@@ -50,18 +49,18 @@ def test_classificar_titulo_valido(client: TestClient) -> None:
 
 
 def test_classificar_titulo_vazio_retorna_422(client: TestClient) -> None:
-    """Título vazio viola a validação do schema (min_length=1) -> 422."""
+    # Título vazio viola a validação do schema (min_length=1) -> 422.
     resp = client.post("/classificar", json={"titulo": ""})
     assert resp.status_code == 422
 
 
 def test_classificar_sem_termos_classificaveis_retorna_422(client: TestClient) -> None:
-    """Título só com números/pontuação fica vazio após o pré-processamento -> 422."""
+    # Título só com números/pontuação fica vazio após o pré-processamento -> 422.
     resp = client.post("/classificar", json={"titulo": "123 456 !!!"})
     assert resp.status_code == 422
 
 
 def test_classificar_campo_ausente_retorna_422(client: TestClient) -> None:
-    """Corpo sem o campo obrigatório 'titulo' é rejeitado pela validação."""
+    # Corpo sem o campo obrigatório 'titulo' é rejeitado pela validação.
     resp = client.post("/classificar", json={})
     assert resp.status_code == 422

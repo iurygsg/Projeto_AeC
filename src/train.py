@@ -1,14 +1,13 @@
-"""Treino do classificador de categorias de notícias (Fase 1 — offline).
-
-Fluxo (PRD, seção 8): dados -> corte de categorias raras -> pré-processamento (spaCy) ->
-TF-IDF + Regressão Logística -> avaliação -> serialização do pipeline.
-
-Este script é a **fonte da verdade** do artefato ``modelo/pipeline.joblib``. Ele usa o mesmo
-``Preprocessador`` que a API usa em produção, garantindo consistência treino/serviço.
-
-Uso:
-    python -m src.train
-"""
+# Treino do classificador de categorias de notícias (Fase 1 — offline).
+#
+# Fluxo (PRD, seção 8): dados -> corte de categorias raras -> pré-processamento (spaCy) ->
+# TF-IDF + Regressão Logística -> avaliação -> serialização do pipeline.
+#
+# Este script é a **fonte da verdade** do artefato ``modelo/pipeline.joblib``. Ele usa o mesmo
+# ``Preprocessador`` que a API usa em produção, garantindo consistência treino/serviço.
+#
+# Uso:
+#     python -m src.train
 
 from __future__ import annotations
 
@@ -34,18 +33,17 @@ SEED = 42
 
 
 def carregar_e_filtrar(caminho: str = CAMINHO_DADOS, min_exemplos: int = MIN_EXEMPLOS) -> pd.DataFrame:
-    """Carrega os dados e remove categorias com poucos exemplos.
-
-    Args:
-        caminho: caminho do CSV com as colunas ``title`` e ``category``.
-        min_exemplos: suporte mínimo por categoria para ser mantida.
-
-    Returns:
-        DataFrame com as colunas ``title`` e ``category`` já filtradas.
-
-    Raises:
-        FileNotFoundError: se o arquivo de dados não existir.
-    """
+    # Carrega os dados e remove categorias com poucos exemplos.
+    #
+    # Args:
+    #     caminho: caminho do CSV com as colunas ``title`` e ``category``.
+    #     min_exemplos: suporte mínimo por categoria para ser mantida.
+    #
+    # Returns:
+    #     DataFrame com as colunas ``title`` e ``category`` já filtradas.
+    #
+    # Raises:
+    #     FileNotFoundError: se o arquivo de dados não existir.
     if not Path(caminho).exists():
         raise FileNotFoundError(
             f"Dataset não encontrado em '{caminho}'. "
@@ -60,7 +58,7 @@ def carregar_e_filtrar(caminho: str = CAMINHO_DADOS, min_exemplos: int = MIN_EXE
 
 
 def construir_pipeline() -> Pipeline:
-    """Monta o Pipeline TF-IDF + Regressão Logística (baseline)."""
+    # Monta o Pipeline TF-IDF + Regressão Logística (baseline).
     return Pipeline([
         ("tfidf", TfidfVectorizer(
             ngram_range=(1, 2),

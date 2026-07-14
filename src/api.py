@@ -1,17 +1,16 @@
-"""API de classificação de categorias de notícias (Fase 2 — online).
-
-Serviço FastAPI que carrega o pipeline treinado uma única vez na inicialização e classifica
-o título recebido a cada requisição. O título passa pelo **mesmo** ``Preprocessador`` usado no
-treino antes do ``predict``, garantindo consistência treino/serviço.
-
-Contrato (PRD, seção 11):
-    POST /classificar   Body: {"titulo": "<string>"}
-    Resposta: {"categoria_prevista": "<string>", "confianca": <float|null>}
-
-Uso:
-    uvicorn src.api:app --reload
-Documentação interativa em http://127.0.0.1:8000/docs
-"""
+# API de classificação de categorias de notícias (FastAPI).
+#
+# Serviço FastAPI que carrega o pipeline treinado uma única vez na inicialização e classifica
+# o título recebido a cada requisição. O título passa pelo mesmo ``Preprocessador`` usado no
+# treino antes do ``predict``, garantindo consistência treino/serviço.
+#
+# Contrato (PRD, seção 11):
+#     POST /classificar   Body: {"titulo": "<string>"}
+#     Resposta: {"categoria_prevista": "<string>", "confianca": <float|null>}
+#
+# Uso:
+#     uvicorn src.api:app --reload
+# Documentação interativa em http://127.0.0.1:8000/docs
 
 from __future__ import annotations
 
@@ -32,7 +31,7 @@ recursos: dict = {}
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Carrega o pipeline e o pré-processador uma vez, ao subir o serviço."""
+    # Carrega o pipeline e o pré-processador uma vez, ao subir o serviço.
     if not Path(CAMINHO_MODELO).exists():
         raise RuntimeError(
             f"Modelo não encontrado em '{CAMINHO_MODELO}'. "
@@ -53,13 +52,13 @@ app = FastAPI(
 
 
 class Requisicao(BaseModel):
-    """Corpo da requisição de classificação."""
+    # Corpo da requisição de classificação.
 
     titulo: str = Field(..., min_length=1, description="Título da notícia a classificar.")
 
 
 class Resposta(BaseModel):
-    """Corpo da resposta de classificação."""
+    # Corpo da resposta de classificação.
 
     categoria_prevista: str
     confianca: float | None = Field(
@@ -77,7 +76,7 @@ def raiz() -> dict:
 def classificar(requisicao: Requisicao) -> Resposta:
     """Classifica um título de notícia e retorna a categoria prevista.
 
-    Envie o título no campo "string". Se o texto vier vazio ou não tiver 
+    Envie o título no campo "string". Se o texto vier vazio ou não tiver
     nenhuma palavra significativa para o modelo analisar, a API retorna erro 422 pedindo um título válido.
     """
     pipeline = recursos["pipeline"]

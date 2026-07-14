@@ -109,5 +109,4 @@ O artefato gerado ao final da Fase 1 é o elo entre as duas fases: a API carrega
 - Dataset local: `dados/articles.csv`.
 - Notebook de EDA: arquivo `.ipynb` versionado no repositório, editado localmente com Claude Code (co-coding). O Google Colab é usado apenas como executor/visualizador, abrindo o mesmo arquivo direto do GitHub — não é a fonte da verdade do notebook.
 
----
-Documento vivo — atualizar conforme as decisões evoluírem ao longo do projeto.
+

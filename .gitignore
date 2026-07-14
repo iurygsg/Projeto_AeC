@@ -24,6 +24,9 @@ data/*
 # Modelo serializado (gerado no treino, pode ser grande)
 *.joblib
 *.pkl
+# Exceção: o modelo do serviço (~6,8 MB) VAI versionado, para que a API/Docker rodem
+# direto após o clone, sem precisar do dataset de 480 MB para re-treinar.
+!modelo/pipeline.joblib
 
 # Exports/relatórios gerados pela análise
 *.xlsx

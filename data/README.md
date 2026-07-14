@@ -10,8 +10,11 @@ Esta pasta contém o dataset do projeto, **não versionado no GitHub** por causa
 
 ## Como obter
 
-O arquivo não está no repositório (ignorado via `.gitignore`). Para reproduzir o projeto,
-coloque o `articles.csv` original nesta pasta:
+O arquivo não está no repositório (ignorado via `.gitignore`). Baixe-o no Kaggle:
+
+**https://www.kaggle.com/datasets/marlesson/news-of-the-site-folhauol**
+
+e coloque o `articles.csv` original nesta pasta:
 
 ```
 data/articles.csv
