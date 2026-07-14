@@ -59,7 +59,8 @@ uvicorn src.api:app --reload
 ```
 
 - Documentação interativa: http://127.0.0.1:8000/docs
-Aqui, basta ir em POST e inserir o título da notícia em "string"
+
+- Aqui, basta ir em POST e inserir o título da notícia em "string"
 
 - Exemplo de requisição:
 
